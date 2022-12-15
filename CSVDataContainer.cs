@@ -104,7 +104,7 @@ namespace Persistency
 			this.targetFile = targetFile;
 		}
 
-		// TODO DK: Separate content of method into loose methods.
+		// TODO DK: Separate method into loose methods.
 		public void OpenFile(out OpenFileResult result)
 		{
 			Debug.Assert(!string.IsNullOrEmpty(targetFile), $"TargetFile is null or empty, this means we can't target a file");
@@ -145,7 +145,7 @@ namespace Persistency
 			result = OpenFileResult.FilledFile;
 		}
 
-		// TODO DK: Separate content of method into loose methods.
+		// TODO DK: Separate method into loose methods.
 		public void StoreFile(out StoreFileResult result)
 		{
 			Debug.Assert(!string.IsNullOrEmpty(this.targetFile), $"No target file set, can't store data if there's no target");
