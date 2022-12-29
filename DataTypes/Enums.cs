@@ -62,6 +62,13 @@
 		Json,
 		Ini,
 	}
+
+	public enum FileExistsResult
+	{
+		NoFilePathGiven,
+		FileExists,
+		FileDoesNotExist,
+	}
 	//////////////////////////////
 
 
