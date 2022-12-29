@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Persistency
 {
-	public class CSVDataContainer
+	public class CSVDataContainer : IFileExistence
 	{
 		private string targetFile;
 
@@ -38,6 +38,30 @@ namespace Persistency
 			}
 
 			return copyData;
+		}
+
+
+		public void DoesFileExist(out FileExistsResult existsResult)
+		{
+			if (string.IsNullOrEmpty(targetFile))
+			{
+				existsResult = FileExistsResult.NoFilePathGiven;
+				return;
+			}
+
+			const FileExistsResult defaultResult = FileExistsResult.FileDoesNotExist;
+			existsResult = defaultResult;
+
+			bool doesFileExist = FileHandling.FileHandler.DoesFileExist(targetFile);
+			if (doesFileExist)
+			{
+				existsResult = FileExistsResult.FileExists;
+			}
+		}
+
+		public void CreateDefaultFile(Extension fileExtension, out CreationResult creationResult)
+		{
+			creationResult = FileHandling.FileHandler.CreateIfNotExists(targetFile, fileExtension);
 		}
 
 
