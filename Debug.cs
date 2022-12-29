@@ -3,7 +3,7 @@
 	// Note DK: The persistency namespace can be used in many environments, this means we do not always have access to UnityEngine debug functionality.
 	public static class Debug
 	{
-#if UNITY_EDITOR || UNITY_STANDALONE
+#if UNITY_5_3_OR_NEWER
 		[System.Diagnostics.ConditionalAttribute("DEBUG")]
 		public static void Assert(bool condition, string message)
 		{
@@ -18,7 +18,7 @@
 #endif
 
 
-#if UNITY_EDITOR || UNITY_STANDALONE
+#if UNITY_5_3_OR_NEWER
 		[System.Diagnostics.ConditionalAttribute("DEBUG")]
 		public static void Log(string message)
 		{
@@ -33,7 +33,7 @@
 #endif
 
 
-#if UNITY_EDITOR || UNITY_STANDALONE
+#if UNITY_5_3_OR_NEWER
 		[System.Diagnostics.ConditionalAttribute("DEBUG")]
 		public static void LogWarning(string message)
 		{
@@ -48,7 +48,7 @@
 #endif
 
 
-#if UNITY_EDITOR || UNITY_STANDALONE
+#if UNITY_5_3_OR_NEWER
 		[System.Diagnostics.ConditionalAttribute("DEBUG")]
 		public static void LogError(string message)
 		{
@@ -64,7 +64,7 @@
 
 
 
-#if UNITY_EDITOR || UNITY_STANDALONE
+#if UNITY_5_3_OR_NEWER
 		private static string FormatMessage(string message)
 		{
 			return string.Format("<color=#00FF00>Persistency System</color> {0}", message);
