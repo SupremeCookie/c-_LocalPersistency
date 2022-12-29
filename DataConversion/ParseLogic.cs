@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
+#if UNITY_5_3_OR_NEWER
+using UnityEngine;
+#endif
+
 namespace Persistency.DataConversion
 {
 	public static class ParseLogic
@@ -10,6 +14,10 @@ namespace Persistency.DataConversion
 			{ typeof(int), new IntConverter() },
 			{ typeof(float), new FloatConverter() },
 			{ typeof(bool), new BoolConverter() },
+
+#if UNITY_5_3_OR_NEWER
+			{ typeof(Vector2), new Vector2Converter() },
+#endif
 		};
 
 
