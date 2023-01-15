@@ -70,8 +70,7 @@
 				Debug.LogWarning($"We detected more than 2 data entries in the line: ({content}) after splitting it, we will consider the content " +
 					$"till the first splitCharacter ({splitCharacter.ToSplitString()}) as the key, and everything after as the value");
 
-				string secondEntry = splitByCharacter[1];
-				int indexOfSecondEntry = content.IndexOf(secondEntry);
+				int indexOfSecondEntry = key.Length + splitCharacter.ToSplitCharArray().Length;
 				string rawValueString = content.Substring(indexOfSecondEntry);
 
 				Debug.LogWarning($"The taken literal string is: ({rawValueString}), this will then be parsed by the system");
