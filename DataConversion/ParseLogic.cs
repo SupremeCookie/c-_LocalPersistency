@@ -15,6 +15,8 @@ namespace Persistency.DataConversion
 			{ typeof(float), new FloatConverter() },
 			{ typeof(bool), new BoolConverter() },
 
+			{ typeof(Coordinates), new CoordinatesConverter() },
+
 #if UNITY_5_3_OR_NEWER
 			{ typeof(Vector2), new Vector2Converter() },
 #endif
