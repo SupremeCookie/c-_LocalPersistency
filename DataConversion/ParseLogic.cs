@@ -19,6 +19,7 @@ namespace Persistency.DataConversion
 
 #if UNITY_5_3_OR_NEWER
 			{ typeof(Vector2), new Vector2Converter() },
+			{ typeof(Vector3), new Vector3Converter() },
 #endif
 		};
 
