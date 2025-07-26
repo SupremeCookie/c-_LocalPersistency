@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Persistency
 {
-	public class CSVDataContainer : IFileExistence
+	public class CSVDataContainer : IFileExistence, IDataIO
 	{
 		private string targetFile;
 
