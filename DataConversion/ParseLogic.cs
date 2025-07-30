@@ -16,6 +16,7 @@ namespace Persistency.DataConversion
 			{ typeof(bool), new BoolConverter() },
 
 			{ typeof(Coordinates), new CoordinatesConverter() },
+			{ typeof(List<StringKVP>), new StringKVPListConverter() },
 
 #if UNITY_5_3_OR_NEWER
 			{ typeof(Vector2), new Vector2Converter() },
