@@ -59,7 +59,7 @@ namespace Persistency
 			}
 		}
 
-		public void CreateDefaultFile(Extension fileExtension, out CreationResult creationResult)
+		public virtual void CreateDefaultFile(Extension fileExtension, out CreationResult creationResult)
 		{
 			creationResult = FileHandling.FileHandler.CreateIfNotExists(targetFile, fileExtension);
 		}
