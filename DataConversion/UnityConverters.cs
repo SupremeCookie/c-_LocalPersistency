@@ -1,4 +1,6 @@
 ﻿#if UNITY_5_3_OR_NEWER
+using System;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 #endif
 
@@ -61,6 +63,33 @@ namespace Persistency.DataConversion
 		{
 			Vector3 castedObj = (Vector3)(object)obj;
 			return $"{castedObj.x}{splitChar}{castedObj.y}{splitChar}{castedObj.z}";
+		}
+	}
+
+	public class ResolutionConverter : Converter
+	{
+		public override T ParseFromString<T>(string data)
+		{
+			var result = Screen.currentResolution;
+
+			// Note DK: We only parse the width and height, refreshrate we fully depend on current setting, idgaf
+			string[] splitString = data.Split("@");
+			string[] resolutionSplit = splitString[0].Split("x");
+
+			var parsedWidth = int.TryParse(resolutionSplit[0].Trim(), out var newWidth);
+			var parsedHeight = int.TryParse(resolutionSplit[1].Trim(), out var newHeight);
+			if (parsedWidth && parsedHeight)
+			{
+				result.width = newWidth;
+				result.height = newHeight;
+			}
+
+			return (T)(object)result;
+		}
+
+		public override string ParseToString<T>(T obj)
+		{
+			return obj.ToString();
 		}
 	}
 }
