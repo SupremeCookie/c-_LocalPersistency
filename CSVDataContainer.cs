@@ -8,6 +8,7 @@ namespace Persistency
 	public class CSVDataContainer : IFileExistence, IDataIO
 	{
 		private string targetFile;
+		private bool isEncrypted;
 
 		private string rawData;
 		private string[] lines;
@@ -24,6 +25,7 @@ namespace Persistency
 
 		public CSVDataContainer() { }
 		public CSVDataContainer(string filePath) { SetTarget(filePath); }
+		public CSVDataContainer(string filePath, bool isEncrypted) { SetTarget(filePath); SetEncryptionRequirement(isEncrypted); }
 
 
 		public Dictionary<string, string> GetAllData()
@@ -62,6 +64,7 @@ namespace Persistency
 		public virtual void CreateDefaultFile(Extension fileExtension, out CreationResult creationResult)
 		{
 			creationResult = FileHandling.FileHandler.CreateIfNotExists(targetFile, fileExtension);
+
 		}
 
 
@@ -128,6 +131,12 @@ namespace Persistency
 			this.targetFile = targetFile;
 		}
 
+		public void SetEncryptionRequirement(bool isEncrypted)
+		{
+			this.isEncrypted = isEncrypted;
+		}
+
+
 		// TODO DK: Separate method into loose methods.
 		public void OpenFile(out OpenFileResult result)
 		{
@@ -145,6 +154,19 @@ namespace Persistency
 				data = new Dictionary<string, string>(minimumCapacity);
 				result = OpenFileResult.EmptyFile;
 				return;
+			}
+
+			if (isEncrypted)
+			{
+				rawData = DecryptContent(rawData);
+			}
+			else
+			{
+				if (IsContentEncrypted(rawData))
+				{
+					Debug.LogWarning($"Was trying to open encrypted data without designating as an encrypted file. We're gonna decrypt now first");
+					rawData = DecryptContent(rawData);
+				}
 			}
 
 			lines = TextTransformer.ToLines(rawData);
@@ -197,6 +219,8 @@ namespace Persistency
 			System.Array.Sort(csvLines);
 
 			string csvFileContent = TextTransformer.FromLines(csvLines);
+			if (isEncrypted)
+				csvFileContent = EncryptContent(csvFileContent);
 
 			var storeResult = FileHandling.FileHandler.StoreData(targetFile, csvFileContent);
 
@@ -209,6 +233,54 @@ namespace Persistency
 			}
 
 			result = StoreFileResult.Stored;
+		}
+
+
+		private string EncryptContent(string content)
+		{
+			try
+			{
+				if (IsContentEncrypted(content))
+				{
+					Debug.Log($"Content is already encrypted, cannot re-encrypt it");
+					return content;
+				}
+
+				var prefix = Persistency.Encryption.Constants.unreadableEncryptionPrefix;
+				var encryptedContent = Persistency.SimpleXOREncryption.EncryptDecrypt(content);
+				var result = $"{prefix}{encryptedContent}";
+				return result;
+			}
+			catch (System.Exception e)
+			{
+				return content;
+			}
+		}
+
+		private string DecryptContent(string content)
+		{
+			try
+			{
+				if (!IsContentEncrypted(content))
+				{
+					UnityEngine.Debug.Log($"Content is already decrypted, cannot re-decrypt it");
+					return content;
+				}
+
+				var contentWithoutPrefix = content.Remove(0, Persistency.Encryption.Constants.unreadableEncryptionPrefix.Length);
+				var result = $"{Persistency.SimpleXOREncryption.EncryptDecrypt(contentWithoutPrefix)}";
+				return result;
+			}
+			catch (System.Exception e)
+			{
+				return content;
+			}
+		}
+
+		private bool IsContentEncrypted(string content)
+		{
+			bool isEncrypted = content.StartsWith(Persistency.Encryption.Constants.unreadableEncryptionPrefix);
+			return isEncrypted;
 		}
 
 
